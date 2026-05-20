@@ -90,8 +90,7 @@ export default function ChatInterface() {
       await sendToAPI([
         {
           role: "user",
-          content:
-            "Bonjour, je souhaite obtenir un devis d'assurance auto avec Leocare.",
+          content: "Bonjour, je souhaite obtenir un devis d'assurance auto avec Leocare.",
         },
       ]);
     } catch (error) {
@@ -131,7 +130,6 @@ export default function ChatInterface() {
         ...messages.map((m) => ({ role: m.role, content: m.content })),
         { role: "user" as const, content: text },
       ];
-
       await sendToAPI(apiMessages);
     } catch (error) {
       console.error(error);
@@ -149,7 +147,7 @@ export default function ChatInterface() {
     }
   };
 
-  const handleChoice = (value: string, label: string) => {
+  const handleChoice = (_value: string, label: string) => {
     handleSendMessage(label);
   };
 
@@ -163,36 +161,40 @@ export default function ChatInterface() {
   return (
     <div
       className="flex flex-col h-screen"
-      style={{ background: "var(--color-bg-light)" }}
+      style={{ background: "var(--gradient-dark-bg)" }}
     >
-      {/* Header */}
+      {/* ── Header ── */}
       <header
-        className="px-4 py-3 flex items-center gap-3"
+        className="px-5 py-3 flex items-center gap-3 flex-shrink-0"
         style={{
-          background: "var(--color-white)",
-          borderBottom: "1px solid #e8e2f5",
-          boxShadow: "var(--shadow-card)",
+          background: "var(--dark-surface)",
+          borderBottom: "1px solid var(--dark-border)",
+          boxShadow: "var(--shadow-dark)",
         }}
       >
-        {/* Avatar */}
+        {/* Avatar avec glow */}
         <div
-          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-          style={{ background: "var(--color-primary)" }}
+          className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
+          style={{
+            background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
+            boxShadow: "var(--shadow-glow)",
+            color: "#fff",
+          }}
         >
           L
         </div>
 
         <div>
-          <h1
-            className="font-semibold text-sm"
-            style={{ color: "#1a1033" }}
+          <p
+            className="font-semibold text-sm leading-tight"
+            style={{ color: "var(--dark-text)" }}
           >
             Conseiller Leocare
-          </h1>
-          <p className="text-xs flex items-center gap-1" style={{ color: "#22c55e" }}>
+          </p>
+          <p className="text-xs flex items-center gap-1.5" style={{ color: "var(--color-secondary)" }}>
             <span
               className="w-1.5 h-1.5 rounded-full inline-block"
-              style={{ background: "#22c55e" }}
+              style={{ background: "var(--color-secondary)", boxShadow: "0 0 6px var(--color-secondary)" }}
             />
             En ligne
           </p>
@@ -202,8 +204,9 @@ export default function ChatInterface() {
           <span
             className="text-xs px-3 py-1 rounded-full font-medium"
             style={{
-              background: "var(--color-primary-light)",
-              color: "var(--color-primary)",
+              background: "var(--dark-surface-3)",
+              color: "var(--color-secondary)",
+              border: "1px solid var(--dark-border)",
             }}
           >
             Assurance Auto
@@ -211,56 +214,74 @@ export default function ChatInterface() {
         </div>
       </header>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+      {/* ── Messages ── */}
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {!isStarted ? (
           /* ── Splash screen ── */
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
-            {/* Logo avatar */}
-            <div
-              className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold"
-              style={{
-                background: "var(--color-primary)",
-                boxShadow: "var(--shadow-hover)",
-              }}
-            >
-              L
-            </div>
-
-            <div>
-              <h2
-                className="text-2xl mb-2"
+          <div className="flex flex-col items-center justify-center h-full text-center space-y-8 px-4">
+            {/* Logo avec halo */}
+            <div className="relative">
+              <div
+                className="absolute inset-0 rounded-full blur-2xl opacity-60"
+                style={{ background: "var(--color-primary)", transform: "scale(1.4)" }}
+              />
+              <div
+                className="relative w-24 h-24 rounded-full flex items-center justify-center font-bold text-4xl"
                 style={{
+                  background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
+                  boxShadow: "var(--shadow-glow), var(--shadow-dark)",
+                  color: "#fff",
                   fontFamily: "var(--font-display)",
-                  color: "var(--color-primary-deep)",
                 }}
               >
-                Votre assurance auto en quelques minutes
+                L
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h2
+                className="text-3xl leading-tight"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  color: "var(--dark-text)",
+                }}
+              >
+                Votre assurance auto
+                <br />
+                <span style={{ color: "var(--color-secondary)" }}>en quelques minutes</span>
               </h2>
-              <p className="max-w-sm text-sm" style={{ color: "var(--color-text)" }}>
+              <p className="text-base max-w-sm mx-auto" style={{ color: "var(--dark-text-muted)" }}>
                 Notre conseiller IA Leocare vous guide pour trouver la meilleure
                 offre adaptée à votre profil.
               </p>
             </div>
 
             {/* Value props */}
-            <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--color-text)" }}>
+            <div
+              className="rounded-2xl px-6 py-4 space-y-3 w-full max-w-xs"
+              style={{
+                background: "var(--dark-surface)",
+                border: "1px solid var(--dark-border)",
+                boxShadow: "var(--shadow-dark)",
+              }}
+            >
               {[
-                "Devis en moins de 5 minutes",
-                "100% digital, sans paperasse",
-                "Attestation immédiate",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2">
+                { icon: "⚡", text: "Devis en moins de 5 minutes" },
+                { icon: "✦", text: "100% digital, sans paperasse" },
+                { icon: "◈", text: "Attestation immédiate" },
+              ].map(({ icon, text }) => (
+                <div key={text} className="flex items-center gap-3 text-sm">
                   <span
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs flex-shrink-0"
                     style={{
-                      background: "var(--color-secondary)",
-                      color: "var(--color-primary-deep)",
+                      background: "var(--dark-surface-3)",
+                      color: "var(--color-secondary)",
+                      border: "1px solid var(--dark-border)",
                     }}
                   >
-                    ✓
+                    {icon}
                   </span>
-                  {item}
+                  <span style={{ color: "var(--dark-text)" }}>{text}</span>
                 </div>
               ))}
             </div>
@@ -268,20 +289,24 @@ export default function ChatInterface() {
             {/* CTA */}
             <button
               onClick={handleStart}
-              className="px-8 py-3 rounded-full font-semibold text-white"
+              className="px-8 py-3 rounded-full font-semibold text-base"
               style={{
-                background: "var(--color-primary)",
+                background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-alt) 100%)",
+                color: "#fff",
+                boxShadow: "var(--shadow-glow)",
                 transition: "var(--transition-base)",
-                boxShadow: "var(--shadow-hover)",
+                border: "none",
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "var(--color-primary-dark)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "var(--color-primary)")
-              }
+              onMouseEnter={(e) => {
+                const btn = e.currentTarget as HTMLButtonElement;
+                btn.style.boxShadow = "0 0 32px rgba(111,67,214,0.6)";
+                btn.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                const btn = e.currentTarget as HTMLButtonElement;
+                btn.style.boxShadow = "var(--shadow-glow)";
+                btn.style.transform = "translateY(0)";
+              }}
             >
               Démarrer mon devis →
             </button>
@@ -298,8 +323,12 @@ export default function ChatInterface() {
                 {/* Assistant avatar */}
                 {message.role === "assistant" && (
                   <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mb-1"
-                    style={{ background: "var(--color-primary)" }}
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mb-1"
+                    style={{
+                      background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
+                      boxShadow: "0 0 10px rgba(111,67,214,0.4)",
+                      color: "#fff",
+                    }}
                   >
                     L
                   </div>
@@ -310,24 +339,25 @@ export default function ChatInterface() {
                   style={
                     message.role === "user"
                       ? {
-                          background: "var(--color-primary)",
-                          color: "var(--color-white)",
+                          background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-alt) 100%)",
+                          color: "#fff",
                           borderBottomRightRadius: "4px",
+                          boxShadow: "0 2px 12px rgba(111,67,214,0.3)",
                         }
                       : {
-                          background: "var(--color-white)",
-                          color: "var(--color-text)",
+                          background: "var(--dark-surface)",
+                          color: "var(--dark-text)",
                           borderBottomLeftRadius: "4px",
-                          boxShadow: "var(--shadow-card)",
-                          border: "1px solid #ede8f9",
+                          border: "1px solid var(--dark-border)",
+                          boxShadow: "var(--shadow-dark)",
                         }
                   }
                 >
                   {message.content}
                   {message.isStreaming && (
                     <span
-                      className="inline-block w-1 h-4 ml-1 animate-pulse rounded-full"
-                      style={{ background: "var(--color-primary-alt)" }}
+                      className="inline-block w-0.5 h-4 ml-1 animate-pulse rounded-full"
+                      style={{ background: "var(--color-secondary)" }}
                     />
                   )}
                 </div>
@@ -343,21 +373,24 @@ export default function ChatInterface() {
                     onClick={() => handleChoice(choice.value, choice.label)}
                     className="px-4 py-2 rounded-full text-sm font-medium"
                     style={{
-                      background: "var(--color-white)",
-                      border: "1.5px solid var(--color-primary)",
-                      color: "var(--color-primary)",
-                      boxShadow: "var(--shadow-card)",
+                      background: "var(--dark-surface-2)",
+                      border: "1px solid var(--dark-border)",
+                      color: "var(--color-secondary)",
                       transition: "var(--transition-base)",
                     }}
                     onMouseEnter={(e) => {
                       const btn = e.currentTarget as HTMLButtonElement;
                       btn.style.background = "var(--color-primary)";
-                      btn.style.color = "var(--color-white)";
+                      btn.style.color = "#fff";
+                      btn.style.borderColor = "var(--color-primary)";
+                      btn.style.boxShadow = "0 0 12px rgba(111,67,214,0.4)";
                     }}
                     onMouseLeave={(e) => {
                       const btn = e.currentTarget as HTMLButtonElement;
-                      btn.style.background = "var(--color-white)";
-                      btn.style.color = "var(--color-primary)";
+                      btn.style.background = "var(--dark-surface-2)";
+                      btn.style.color = "var(--color-secondary)";
+                      btn.style.borderColor = "var(--dark-border)";
+                      btn.style.boxShadow = "none";
                     }}
                   >
                     {choice.label}
@@ -370,27 +403,31 @@ export default function ChatInterface() {
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex items-end gap-2">
                 <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                  style={{ background: "var(--color-primary)" }}
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                  style={{
+                    background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
+                    color: "#fff",
+                  }}
                 >
                   L
                 </div>
                 <div
                   className="px-4 py-3 rounded-2xl rounded-bl-sm"
                   style={{
-                    background: "var(--color-white)",
-                    boxShadow: "var(--shadow-card)",
-                    border: "1px solid #ede8f9",
+                    background: "var(--dark-surface)",
+                    border: "1px solid var(--dark-border)",
+                    boxShadow: "var(--shadow-dark)",
                   }}
                 >
-                  <div className="flex gap-1 items-center h-4">
-                    {["-0.3s", "-0.15s", "0s"].map((delay) => (
+                  <div className="flex gap-1.5 items-center h-4">
+                    {["0s", "0.15s", "0.3s"].map((delay) => (
                       <span
                         key={delay}
                         className="w-2 h-2 rounded-full animate-bounce"
                         style={{
-                          background: "var(--color-primary-alt)",
+                          background: "var(--color-primary)",
                           animationDelay: delay,
+                          boxShadow: "0 0 6px rgba(111,67,214,0.5)",
                         }}
                       />
                     ))}
@@ -404,13 +441,13 @@ export default function ChatInterface() {
         )}
       </div>
 
-      {/* Input bar */}
+      {/* ── Input bar ── */}
       {isStarted && (
         <div
-          className="px-4 py-3"
+          className="px-4 py-3 flex-shrink-0"
           style={{
-            background: "var(--color-white)",
-            borderTop: "1px solid #e8e2f5",
+            background: "var(--dark-surface)",
+            borderTop: "1px solid var(--dark-border)",
           }}
         >
           <form
@@ -429,36 +466,38 @@ export default function ChatInterface() {
               disabled={isLoading}
               className="flex-1 rounded-full px-4 py-2.5 text-sm outline-none disabled:opacity-50"
               style={{
-                background: "var(--color-primary-light)",
-                color: "var(--color-text)",
-                border: "1.5px solid transparent",
+                background: "var(--dark-surface-2)",
+                color: "var(--dark-text)",
+                border: "1px solid var(--dark-border)",
                 transition: "var(--transition-base)",
               }}
               onFocus={(e) => {
-                (e.currentTarget as HTMLInputElement).style.borderColor =
-                  "var(--color-primary)";
+                const el = e.currentTarget as HTMLInputElement;
+                el.style.borderColor = "var(--color-primary)";
+                el.style.boxShadow = "0 0 0 3px rgba(111,67,214,0.2)";
               }}
               onBlur={(e) => {
-                (e.currentTarget as HTMLInputElement).style.borderColor =
-                  "transparent";
+                const el = e.currentTarget as HTMLInputElement;
+                el.style.borderColor = "var(--dark-border)";
+                el.style.boxShadow = "none";
               }}
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white flex-shrink-0 disabled:opacity-40"
+              className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 disabled:opacity-40"
               style={{
-                background: "var(--color-primary)",
+                background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-alt) 100%)",
+                color: "#fff",
+                boxShadow: "0 0 12px rgba(111,67,214,0.4)",
                 transition: "var(--transition-base)",
               }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "var(--color-primary-dark)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLButtonElement).style.background =
-                  "var(--color-primary)")
-              }
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 20px rgba(111,67,214,0.7)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 12px rgba(111,67,214,0.4)";
+              }}
             >
               <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
                 <path
@@ -478,10 +517,7 @@ export default function ChatInterface() {
               </svg>
             </button>
           </form>
-          <p
-            className="text-center text-xs mt-2"
-            style={{ color: "#a99ec7" }}
-          >
+          <p className="text-center text-xs mt-2" style={{ color: "var(--dark-text-subtle)" }}>
             Propulsé par Leocare · Vos données sont sécurisées
           </p>
         </div>

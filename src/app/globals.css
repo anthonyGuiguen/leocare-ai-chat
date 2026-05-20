@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  /* === COULEURS PRIMAIRES === */
+  /* === COULEURS PRIMAIRES (brand) === */
   --color-primary:        #6f43d6;
   --color-primary-dark:   #5d38b5;
   --color-primary-alt:    #7043d1;
   --color-primary-deep:   #260046;
   --color-primary-light:  #f0ecfa;
 
-  /* === COULEURS SECONDAIRES === */
+  /* === COULEURS SECONDAIRES (menthe) === */
   --color-secondary:       #70efdd;
   --color-secondary-light: #a6f5ea;
   --color-secondary-dark:  #19e0c4;
@@ -19,13 +19,29 @@
   --color-bg-light:  #f2f4f8;
   --color-white:     #ffffff;
 
+  /* === DARK PALETTE === */
+  --dark-bg:           #0d0820;
+  --dark-surface:      #1a0f3c;
+  --dark-surface-2:    #22154a;
+  --dark-surface-3:    #2e1d5e;
+  --dark-border:       rgba(111, 67, 214, 0.25);
+  --dark-border-glow:  rgba(111, 67, 214, 0.5);
+  --dark-text:         #e8e0f8;
+  --dark-text-muted:   #9d8fc2;
+  --dark-text-subtle:  #5e4f8a;
+
   /* === OMBRES === */
   --shadow-card:   0 2px 10px 0 rgba(79, 53, 155, 0.149);
   --shadow-hover:  0 0.2rem 1rem rgba(79, 53, 155, 0.25);
+  --shadow-dark:   0 4px 24px rgba(13, 8, 32, 0.6);
+  --shadow-glow:   0 0 20px rgba(111, 67, 214, 0.3);
 
   /* === GRADIENTS === */
-  --gradient-hero:    linear-gradient(120deg, rgb(112,67,209) 35%, rgba(112,67,209,0) 50%);
-  --gradient-page-bg: linear-gradient(360deg, #F2F4F8 20%, #ffffff 40%);
+  --gradient-hero:      linear-gradient(120deg, rgb(112,67,209) 35%, rgba(112,67,209,0) 50%);
+  --gradient-page-bg:   linear-gradient(360deg, #F2F4F8 20%, #ffffff 40%);
+  --gradient-dark-bg:   linear-gradient(160deg, #0d0820 0%, #1a0f3c 50%, #0d0820 100%);
+  --gradient-dark-hero: linear-gradient(135deg, #1a0f3c 0%, #260046 50%, #0d0820 100%);
+  --gradient-mint-glow: linear-gradient(135deg, rgba(112,239,221,0.15) 0%, transparent 60%);
 
   /* === TYPOGRAPHIE === */
   --font-display: var(--font-paytone-one), "Paytone One", sans-serif;
@@ -39,27 +55,18 @@
 
   /* === TRANSITIONS === */
   --transition-base: all 0.3s linear;
-
-  /* === COMPAT TAILWIND === */
-  --background: var(--color-bg-light);
-  --foreground: var(--color-text);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--dark-bg);
+  --color-foreground: var(--dark-text);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
 }
 
-/* Base typographique : 1rem = 10px */
-html {
-  font-size: 62.5%;
-}
-
 body {
-  font-size: 1.6rem;
-  background: var(--color-bg-light);
-  color: var(--color-text);
+  font-size: 16px;
+  background: var(--dark-bg);
+  color: var(--dark-text);
   font-family: var(--font-body);
 }
