@@ -87,7 +87,6 @@ export default function ChatInterface() {
     setIsStarted(true);
     setIsLoading(true);
     try {
-      const step = SUBSCRIPTION_STEPS["welcome"];
       await sendToAPI([
         {
           role: "user",
@@ -115,13 +114,11 @@ export default function ChatInterface() {
     setInput("");
     setIsLoading(true);
 
-    // Save data for current step
     const dataKey = STEP_DATA_MAP[currentStep];
     if (dataKey) {
       setConversationData((prev) => ({ ...prev, [dataKey]: text }));
     }
 
-    // Advance step
     const step = SUBSCRIPTION_STEPS[currentStep];
     if (step.nextStep) {
       const nextStep =
@@ -164,21 +161,51 @@ export default function ChatInterface() {
     currentStepData.choices;
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div
+      className="flex flex-col h-screen"
+      style={{ background: "var(--color-bg-light)" }}
+    >
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3 shadow-sm">
-        <div className="w-10 h-10 rounded-full bg-[#FF5A1F] flex items-center justify-center text-white font-bold text-sm">
+      <header
+        className="px-4 py-3 flex items-center gap-3"
+        style={{
+          background: "var(--color-white)",
+          borderBottom: "1px solid #e8e2f5",
+          boxShadow: "var(--shadow-card)",
+        }}
+      >
+        {/* Avatar */}
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+          style={{ background: "var(--color-primary)" }}
+        >
           L
         </div>
+
         <div>
-          <h1 className="font-semibold text-gray-900 text-sm">Conseiller Leocare</h1>
-          <p className="text-xs text-green-500 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 bg-green-500 rounded-full inline-block"></span>
+          <h1
+            className="font-semibold text-sm"
+            style={{ color: "#1a1033" }}
+          >
+            Conseiller Leocare
+          </h1>
+          <p className="text-xs flex items-center gap-1" style={{ color: "#22c55e" }}>
+            <span
+              className="w-1.5 h-1.5 rounded-full inline-block"
+              style={{ background: "#22c55e" }}
+            />
             En ligne
           </p>
         </div>
+
         <div className="ml-auto">
-          <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
+          <span
+            className="text-xs px-3 py-1 rounded-full font-medium"
+            style={{
+              background: "var(--color-primary-light)",
+              color: "var(--color-primary)",
+            }}
+          >
             Assurance Auto
           </span>
         </div>
@@ -187,32 +214,74 @@ export default function ChatInterface() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         {!isStarted ? (
+          /* ── Splash screen ── */
           <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-[#FF5A1F] flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+            {/* Logo avatar */}
+            <div
+              className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold"
+              style={{
+                background: "var(--color-primary)",
+                boxShadow: "var(--shadow-hover)",
+              }}
+            >
               L
             </div>
+
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2
+                className="text-2xl mb-2"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  color: "var(--color-primary-deep)",
+                }}
+              >
                 Votre assurance auto en quelques minutes
               </h2>
-              <p className="text-gray-500 max-w-sm">
-                Notre conseiller IA Leocare vous guide pour trouver la meilleure offre adaptée à votre profil.
+              <p className="max-w-sm text-sm" style={{ color: "var(--color-text)" }}>
+                Notre conseiller IA Leocare vous guide pour trouver la meilleure
+                offre adaptée à votre profil.
               </p>
             </div>
-            <div className="flex flex-col gap-2 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <span className="text-[#FF5A1F]">✓</span> Devis en moins de 5 minutes
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#FF5A1F]">✓</span> 100% digital, sans paperasse
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#FF5A1F]">✓</span> Attestation immédiate
-              </div>
+
+            {/* Value props */}
+            <div className="flex flex-col gap-2 text-sm" style={{ color: "var(--color-text)" }}>
+              {[
+                "Devis en moins de 5 minutes",
+                "100% digital, sans paperasse",
+                "Attestation immédiate",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <span
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                    style={{
+                      background: "var(--color-secondary)",
+                      color: "var(--color-primary-deep)",
+                    }}
+                  >
+                    ✓
+                  </span>
+                  {item}
+                </div>
+              ))}
             </div>
+
+            {/* CTA */}
             <button
               onClick={handleStart}
-              className="bg-[#FF5A1F] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#e64d1a] transition-colors shadow-md"
+              className="px-8 py-3 rounded-full font-semibold text-white"
+              style={{
+                background: "var(--color-primary)",
+                transition: "var(--transition-base)",
+                boxShadow: "var(--shadow-hover)",
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.background =
+                  "var(--color-primary-dark)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.background =
+                  "var(--color-primary)")
+              }
             >
               Démarrer mon devis →
             </button>
@@ -222,23 +291,44 @@ export default function ChatInterface() {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} items-end gap-2`}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                } items-end gap-2`}
               >
+                {/* Assistant avatar */}
                 {message.role === "assistant" && (
-                  <div className="w-7 h-7 rounded-full bg-[#FF5A1F] flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mb-1">
+                  <div
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mb-1"
+                    style={{ background: "var(--color-primary)" }}
+                  >
                     L
                   </div>
                 )}
+
                 <div
-                  className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                  className="max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed"
+                  style={
                     message.role === "user"
-                      ? "bg-[#FF5A1F] text-white rounded-br-sm"
-                      : "bg-white text-gray-800 shadow-sm border border-gray-100 rounded-bl-sm"
-                  }`}
+                      ? {
+                          background: "var(--color-primary)",
+                          color: "var(--color-white)",
+                          borderBottomRightRadius: "4px",
+                        }
+                      : {
+                          background: "var(--color-white)",
+                          color: "var(--color-text)",
+                          borderBottomLeftRadius: "4px",
+                          boxShadow: "var(--shadow-card)",
+                          border: "1px solid #ede8f9",
+                        }
+                  }
                 >
                   {message.content}
                   {message.isStreaming && (
-                    <span className="inline-block w-1 h-4 bg-gray-400 ml-1 animate-pulse rounded-full" />
+                    <span
+                      className="inline-block w-1 h-4 ml-1 animate-pulse rounded-full"
+                      style={{ background: "var(--color-primary-alt)" }}
+                    />
                   )}
                 </div>
               </div>
@@ -251,7 +341,24 @@ export default function ChatInterface() {
                   <button
                     key={choice.value}
                     onClick={() => handleChoice(choice.value, choice.label)}
-                    className="bg-white border border-[#FF5A1F] text-[#FF5A1F] px-4 py-2 rounded-full text-sm hover:bg-[#FF5A1F] hover:text-white transition-colors shadow-sm"
+                    className="px-4 py-2 rounded-full text-sm font-medium"
+                    style={{
+                      background: "var(--color-white)",
+                      border: "1.5px solid var(--color-primary)",
+                      color: "var(--color-primary)",
+                      boxShadow: "var(--shadow-card)",
+                      transition: "var(--transition-base)",
+                    }}
+                    onMouseEnter={(e) => {
+                      const btn = e.currentTarget as HTMLButtonElement;
+                      btn.style.background = "var(--color-primary)";
+                      btn.style.color = "var(--color-white)";
+                    }}
+                    onMouseLeave={(e) => {
+                      const btn = e.currentTarget as HTMLButtonElement;
+                      btn.style.background = "var(--color-white)";
+                      btn.style.color = "var(--color-primary)";
+                    }}
                   >
                     {choice.label}
                   </button>
@@ -259,28 +366,53 @@ export default function ChatInterface() {
               </div>
             )}
 
+            {/* Loading indicator */}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex items-end gap-2">
-                <div className="w-7 h-7 rounded-full bg-[#FF5A1F] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                <div
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                  style={{ background: "var(--color-primary)" }}
+                >
                   L
                 </div>
-                <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
+                <div
+                  className="px-4 py-3 rounded-2xl rounded-bl-sm"
+                  style={{
+                    background: "var(--color-white)",
+                    boxShadow: "var(--shadow-card)",
+                    border: "1px solid #ede8f9",
+                  }}
+                >
                   <div className="flex gap-1 items-center h-4">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                    {["-0.3s", "-0.15s", "0s"].map((delay) => (
+                      <span
+                        key={delay}
+                        className="w-2 h-2 rounded-full animate-bounce"
+                        style={{
+                          background: "var(--color-primary-alt)",
+                          animationDelay: delay,
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
             )}
+
             <div ref={messagesEndRef} />
           </>
         )}
       </div>
 
-      {/* Input */}
+      {/* Input bar */}
       {isStarted && (
-        <div className="bg-white border-t border-gray-200 px-4 py-3">
+        <div
+          className="px-4 py-3"
+          style={{
+            background: "var(--color-white)",
+            borderTop: "1px solid #e8e2f5",
+          }}
+        >
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -293,16 +425,40 @@ export default function ChatInterface() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={
-                currentStepData.hint || "Tapez votre réponse..."
-              }
+              placeholder={currentStepData.hint || "Tapez votre réponse…"}
               disabled={isLoading}
-              className="flex-1 bg-gray-100 rounded-full px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F] focus:ring-opacity-50 disabled:opacity-50 transition"
+              className="flex-1 rounded-full px-4 py-2.5 text-sm outline-none disabled:opacity-50"
+              style={{
+                background: "var(--color-primary-light)",
+                color: "var(--color-text)",
+                border: "1.5px solid transparent",
+                transition: "var(--transition-base)",
+              }}
+              onFocus={(e) => {
+                (e.currentTarget as HTMLInputElement).style.borderColor =
+                  "var(--color-primary)";
+              }}
+              onBlur={(e) => {
+                (e.currentTarget as HTMLInputElement).style.borderColor =
+                  "transparent";
+              }}
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="w-10 h-10 bg-[#FF5A1F] rounded-full flex items-center justify-center text-white disabled:opacity-40 hover:bg-[#e64d1a] transition-colors flex-shrink-0"
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white flex-shrink-0 disabled:opacity-40"
+              style={{
+                background: "var(--color-primary)",
+                transition: "var(--transition-base)",
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.background =
+                  "var(--color-primary-dark)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.background =
+                  "var(--color-primary)")
+              }
             >
               <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
                 <path
@@ -322,7 +478,10 @@ export default function ChatInterface() {
               </svg>
             </button>
           </form>
-          <p className="text-center text-xs text-gray-400 mt-2">
+          <p
+            className="text-center text-xs mt-2"
+            style={{ color: "#a99ec7" }}
+          >
             Propulsé par Leocare · Vos données sont sécurisées
           </p>
         </div>
