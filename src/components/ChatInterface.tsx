@@ -470,7 +470,7 @@ export default function ChatInterface() {
                       btn.style.transform = "translateY(0)";
                     }}
                   >
-                    Demarrer mon devis ->
+                    Demarrer mon devis -&gt;
                   </button>
                 </div>
               ) : (
