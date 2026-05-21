@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { SUBSCRIPTION_STEPS, StepId, ConversationData } from "@/lib/subscription-flow";
 
 interface ChatMessage {
@@ -174,14 +175,10 @@ export default function ChatInterface() {
       >
         {/* Avatar avec glow */}
         <div
-          className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
-          style={{
-            background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
-            boxShadow: "var(--shadow-glow)",
-            color: "#fff",
-          }}
+          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
+          style={{ boxShadow: "var(--shadow-glow)" }}
         >
-          L
+          <Image src="/logo-icon.png" alt="Leocare" width={40} height={40} className="w-full h-full object-cover" />
         </div>
 
         <div>
@@ -222,36 +219,28 @@ export default function ChatInterface() {
             {/* Logo avec halo */}
             <div className="relative">
               <div
-                className="absolute inset-0 rounded-full blur-2xl opacity-60"
+                className="absolute inset-0 rounded-2xl blur-2xl opacity-60"
                 style={{ background: "var(--color-primary)", transform: "scale(1.4)" }}
               />
               <div
-                className="relative w-24 h-24 rounded-full flex items-center justify-center font-bold text-4xl"
-                style={{
-                  background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
-                  boxShadow: "var(--shadow-glow), var(--shadow-dark)",
-                  color: "#fff",
-                  fontFamily: "var(--font-display)",
-                }}
+                className="relative w-24 h-24 rounded-2xl overflow-hidden"
+                style={{ boxShadow: "var(--shadow-glow), var(--shadow-dark)" }}
               >
-                L
+                <Image src="/logo-icon.png" alt="Leocare" width={96} height={96} className="w-full h-full object-cover" />
               </div>
             </div>
 
             <div className="space-y-3">
-              <h2
-                className="text-3xl leading-tight"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  color: "var(--dark-text)",
-                }}
-              >
-                Votre assurance auto
-                <br />
-                <span style={{ color: "var(--color-secondary)" }}>en quelques minutes</span>
-              </h2>
+              <Image
+                src="/logo-wordmark.png"
+                alt="Leocare Assurances"
+                width={240}
+                height={72}
+                className="mx-auto"
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
               <p className="text-base max-w-sm mx-auto" style={{ color: "var(--dark-text-muted)" }}>
-                Notre conseiller IA Leocare vous guide pour trouver la meilleure
+                Notre conseiller IA vous guide pour trouver la meilleure
                 offre adaptée à votre profil.
               </p>
             </div>
@@ -323,14 +312,10 @@ export default function ChatInterface() {
                 {/* Assistant avatar */}
                 {message.role === "assistant" && (
                   <div
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mb-1"
-                    style={{
-                      background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
-                      boxShadow: "0 0 10px rgba(111,67,214,0.4)",
-                      color: "#fff",
-                    }}
+                    className="w-7 h-7 rounded-lg overflow-hidden flex-shrink-0 mb-1"
+                    style={{ boxShadow: "0 0 10px rgba(111,67,214,0.4)" }}
                   >
-                    L
+                    <Image src="/logo-icon.png" alt="Leocare" width={28} height={28} className="w-full h-full object-cover" />
                   </div>
                 )}
 
@@ -402,15 +387,12 @@ export default function ChatInterface() {
             {/* Loading indicator */}
             {isLoading && messages[messages.length - 1]?.role === "user" && (
               <div className="flex items-end gap-2">
-                <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                  style={{
-                    background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-deep) 100%)",
-                    color: "#fff",
-                  }}
-                >
-                  L
-                </div>
+              <div
+                className="w-7 h-7 rounded-lg overflow-hidden flex-shrink-0"
+                style={{ boxShadow: "0 0 10px rgba(111,67,214,0.4)" }}
+              >
+                <Image src="/logo-icon.png" alt="Leocare" width={28} height={28} className="w-full h-full object-cover" />
+              </div>
                 <div
                   className="px-4 py-3 rounded-2xl rounded-bl-sm"
                   style={{
