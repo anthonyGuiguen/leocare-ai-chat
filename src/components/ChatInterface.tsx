@@ -85,6 +85,7 @@ export default function ChatInterface() {
   const [currentStep, setCurrentStep] = useState<StepId>("welcome");
   const [conversationData, setConversationData] = useState<ConversationData>({});
   const [isStarted, setIsStarted] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const sessionRef = useRef(0);
@@ -228,14 +229,11 @@ export default function ChatInterface() {
     setCurrentStep("welcome");
     setConversationData({});
     setIsStarted(false);
+    setShowResetConfirm(false);
   };
 
   const handleAbandonQuote = () => {
-    const shouldReset = window.confirm(
-      "Voulez-vous vraiment abandonner le devis ? La conversation sera reinitialisee."
-    );
-    if (!shouldReset) return;
-    handleResetConversation();
+    setShowResetConfirm(true);
   };
 
   const currentStepData = SUBSCRIPTION_STEPS[currentStep];
@@ -290,18 +288,34 @@ export default function ChatInterface() {
           <p className="font-semibold text-xl leading-none sm:text-2xl lg:text-[1.72rem]" style={{ color: "var(--dark-text)" }}>
             Nouveau devis auto
           </p>
-          <button
-            type="button"
-            onClick={handleAbandonQuote}
-            className="w-full rounded-full px-5 py-2 text-sm font-semibold sm:w-auto"
-            style={{
-              background: "rgba(239, 62, 62, 0.16)",
-              color: "#ffb5b5",
-              border: "1px solid rgba(239, 62, 62, 0.5)",
-            }}
-          >
-            Abandonner le devis
-          </button>
+          {isStarted && (
+            <button
+              type="button"
+              onClick={handleAbandonQuote}
+              className="w-full rounded-full px-5 py-2 text-sm font-semibold sm:w-auto"
+              style={{
+                background: "rgba(239, 62, 62, 0.16)",
+                color: "#ffb5b5",
+                border: "1px solid rgba(239, 62, 62, 0.5)",
+                transition: "var(--transition-base)",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                const btn = e.currentTarget as HTMLButtonElement;
+                btn.style.background = "rgba(239, 62, 62, 0.3)";
+                btn.style.borderColor = "rgba(255, 124, 124, 0.8)";
+                btn.style.boxShadow = "0 0 16px rgba(239, 62, 62, 0.35)";
+              }}
+              onMouseLeave={(e) => {
+                const btn = e.currentTarget as HTMLButtonElement;
+                btn.style.background = "rgba(239, 62, 62, 0.16)";
+                btn.style.borderColor = "rgba(239, 62, 62, 0.5)";
+                btn.style.boxShadow = "none";
+              }}
+            >
+              Abandonner le devis
+            </button>
+          )}
         </header>
 
         <div className="mt-4 grid min-h-0 flex-1 gap-4 sm:mt-5 sm:gap-5 lg:mt-6 lg:gap-6 lg:grid-cols-[350px_1fr]">
@@ -709,6 +723,57 @@ export default function ChatInterface() {
           </section>
         </div>
       </div>
+
+      {showResetConfirm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          style={{ background: "rgba(5, 8, 16, 0.78)" }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl p-5 sm:p-6"
+            style={{
+              background: "rgba(29, 19, 63, 0.98)",
+              border: "1px solid rgba(164, 150, 209, 0.28)",
+              boxShadow: "var(--shadow-dark)",
+            }}
+          >
+            <p className="text-lg font-semibold" style={{ color: "var(--dark-text)" }}>
+              Abandonner le devis ?
+            </p>
+            <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--dark-text-muted)" }}>
+              La conversation actuelle sera supprimee et vous reviendrez a l'ecran de demarrage.
+            </p>
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowResetConfirm(false)}
+                className="rounded-full px-4 py-2 text-sm font-semibold"
+                style={{
+                  background: "var(--dark-surface-2)",
+                  color: "var(--dark-text)",
+                  border: "1px solid var(--dark-border)",
+                  cursor: "pointer",
+                }}
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handleResetConversation}
+                className="rounded-full px-4 py-2 text-sm font-semibold"
+                style={{
+                  background: "rgba(239, 62, 62, 0.2)",
+                  color: "#ffc4c4",
+                  border: "1px solid rgba(239, 62, 62, 0.6)",
+                  cursor: "pointer",
+                }}
+              >
+                Oui, abandonner
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
