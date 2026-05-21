@@ -271,7 +271,7 @@ export default function ChatInterface() {
           </button>
         </header>
 
-        <div className="mt-4 grid min-h-0 flex-1 gap-4 sm:mt-5 sm:gap-5 lg:mt-6 lg:gap-6 lg:grid-cols-[350px,1fr]">
+        <div className="mt-4 grid min-h-0 flex-1 gap-4 sm:mt-5 sm:gap-5 lg:mt-6 lg:gap-6 lg:grid-cols-[350px_1fr]">
           <aside
             className="order-2 overflow-hidden rounded-2xl lg:order-1"
             style={{
