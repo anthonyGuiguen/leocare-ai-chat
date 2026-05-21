@@ -87,6 +87,7 @@ export default function ChatInterface() {
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sessionRef = useRef(0);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -98,12 +99,18 @@ export default function ChatInterface() {
 
   const generateId = () => Math.random().toString(36).substr(2, 9);
 
-  const sendToAPI = async (userMessages: { role: "user" | "assistant"; content: string }[]) => {
+  const sendToAPI = async (
+    userMessages: { role: "user" | "assistant"; content: string }[],
+    sessionId: number
+  ) => {
     const assistantId = generateId();
-    setMessages((prev) => [
-      ...prev,
-      { id: assistantId, role: "assistant", content: "", isStreaming: true },
-    ]);
+    setMessages((prev) => {
+      if (sessionRef.current !== sessionId) return prev;
+      return [
+        ...prev,
+        { id: assistantId, role: "assistant", content: "", isStreaming: true },
+      ];
+    });
 
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -122,32 +129,38 @@ export default function ChatInterface() {
       if (done) break;
       const chunk = decoder.decode(value, { stream: true });
       fullContent += chunk;
-      setMessages((prev) =>
-        prev.map((m) =>
+      setMessages((prev) => {
+        if (sessionRef.current !== sessionId) return prev;
+        return prev.map((m) =>
           m.id === assistantId ? { ...m, content: fullContent } : m
-        )
-      );
+        );
+      });
     }
 
-    setMessages((prev) =>
-      prev.map((m) =>
+    setMessages((prev) => {
+      if (sessionRef.current !== sessionId) return prev;
+      return prev.map((m) =>
         m.id === assistantId ? { ...m, isStreaming: false } : m
-      )
-    );
+      );
+    });
 
     return fullContent;
   };
 
   const handleStart = async () => {
+    const sessionId = sessionRef.current;
     setIsStarted(true);
     setIsLoading(true);
     try {
-      await sendToAPI([
-        {
-          role: "user",
-          content: "Bonjour, je souhaite obtenir un devis d'assurance auto avec Leocare.",
-        },
-      ]);
+      await sendToAPI(
+        [
+          {
+            role: "user",
+            content: "Bonjour, je souhaite obtenir un devis d'assurance auto avec Leocare.",
+          },
+        ],
+        sessionId
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -157,6 +170,7 @@ export default function ChatInterface() {
 
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
+    const sessionId = sessionRef.current;
 
     const userMessage: ChatMessage = {
       id: generateId(),
@@ -185,7 +199,7 @@ export default function ChatInterface() {
         ...messages.map((m) => ({ role: m.role, content: m.content })),
         { role: "user" as const, content: text },
       ];
-      await sendToAPI(apiMessages);
+      await sendToAPI(apiMessages, sessionId);
     } catch (error) {
       console.error(error);
       setMessages((prev) => [
@@ -204,6 +218,24 @@ export default function ChatInterface() {
 
   const handleChoice = (_value: string, label: string) => {
     handleSendMessage(label);
+  };
+
+  const handleResetConversation = () => {
+    sessionRef.current += 1;
+    setMessages([]);
+    setInput("");
+    setIsLoading(false);
+    setCurrentStep("welcome");
+    setConversationData({});
+    setIsStarted(false);
+  };
+
+  const handleAbandonQuote = () => {
+    const shouldReset = window.confirm(
+      "Voulez-vous vraiment abandonner le devis ? La conversation sera reinitialisee."
+    );
+    if (!shouldReset) return;
+    handleResetConversation();
   };
 
   const currentStepData = SUBSCRIPTION_STEPS[currentStep];
@@ -260,6 +292,7 @@ export default function ChatInterface() {
           </p>
           <button
             type="button"
+            onClick={handleAbandonQuote}
             className="w-full rounded-full px-5 py-2 text-sm font-semibold sm:w-auto"
             style={{
               background: "rgba(239, 62, 62, 0.16)",
