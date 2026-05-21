@@ -216,20 +216,6 @@ export default function ChatInterface() {
         {!isStarted ? (
           /* ── Splash screen ── */
           <div className="flex flex-col items-center justify-center h-full text-center space-y-8 px-4">
-            {/* Logo avec halo */}
-            <div className="relative">
-              <div
-                className="absolute inset-0 rounded-2xl blur-2xl opacity-60"
-                style={{ background: "var(--color-primary)", transform: "scale(1.4)" }}
-              />
-              <div
-                className="relative w-24 h-24 rounded-2xl overflow-hidden"
-                style={{ boxShadow: "var(--shadow-glow), var(--shadow-dark)" }}
-              >
-                <Image src="/logo-icon.png" alt="Leocare" width={96} height={96} className="w-full h-full object-cover" />
-              </div>
-            </div>
-
             <div className="space-y-3">
               <Image
                 src="/logo-wordmark.png"
